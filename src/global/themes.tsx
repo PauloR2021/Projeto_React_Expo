@@ -6,5 +6,9 @@ export const themes = {
         gray:'gray',
         bgScreen:'#F1F7FA',
         white:'#FFFFFF',
+        statusConcluido: "#22C55E",
+        statusEmAndamento: "#FBBF24",
+        statusPendente: "#EF4444",
+        statusDefault: "#CBD5E1",
     }
 }
