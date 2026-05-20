@@ -1,4 +1,12 @@
 package com.paulo.ToDoList.Dtos;
 
-public class RequestLogin {
+import jakarta.validation.constraints.NotBlank;
+
+public record RequestLogin(
+        @NotBlank(message = "E-mail não pode ser vazio")
+        String email,
+
+        @NotBlank(message ="Senha não pode ser vazio")
+        String password
+) {
 }
