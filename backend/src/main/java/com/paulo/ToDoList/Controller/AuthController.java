@@ -40,11 +40,12 @@ public class AuthController {
     public ResponseEntity<RetornoApi<ResponseToken>> login (@RequestBody @Valid AuthDTO dto) {
     Usuario usuario = authService.info(dto);
 
-    var userNamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.paswword());
+    var userNamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
 
     var auth = this.authenticationManager.authenticate(userNamePassword);
 
     var token = tokenServices.generateToken((Usuario) auth.getPrincipal());
+
 
     ResponseToken response = new ResponseToken(token);
 

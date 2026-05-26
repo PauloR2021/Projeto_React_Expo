@@ -3,18 +3,19 @@ package com.paulo.ToDoList.Controller;
 import com.paulo.ToDoList.Api.RetornoApi;
 import com.paulo.ToDoList.Dtos.Tarefa.RequestTarefa;
 import com.paulo.ToDoList.Dtos.Tarefa.ResponseTarefa;
+import com.paulo.ToDoList.Entity.Usuario;
 import com.paulo.ToDoList.Service.TarefaService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Tag(name = "Tarefa",description = "EndPoint da  Tarefas")
 @RestController
-@RequestMapping("/tarefa")
+@RequestMapping("/tarefas")
 public class TarefaController {
 
     private final TarefaService tarefaService;
@@ -29,6 +30,18 @@ public class TarefaController {
 
         RetornoApi<ResponseTarefa> apiResponse =
                 new RetornoApi<>(true,"Tarefa criada",response);
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping
+    public ResponseEntity<RetornoApi<List<ResponseTarefa>>> findAll(){
+
+        Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        List<ResponseTarefa> response = tarefaService.findyTarefas(usuario.getId());
+
+        RetornoApi<List<ResponseTarefa>> apiResponse =
+                new RetornoApi<>(true,"Tarefas",response);
 
         return ResponseEntity.ok(apiResponse);
     }
