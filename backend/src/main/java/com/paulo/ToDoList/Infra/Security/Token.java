@@ -3,6 +3,7 @@ package com.paulo.ToDoList.Infra.Security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.paulo.ToDoList.Entity.Usuario;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,13 @@ public class Token {
 
             return  JWT.create()
                     .withIssuer("auth-api")
-                    .withSubject(user.getNome())
+                    .withSubject(user.getEmail())
+
+                    // ✅ Informações extras no token
+                    .withClaim("nome", user.getNome())
+                    .withClaim("id", user.getId())
+                    .withClaim("email",user.getEmail())
+
                     .withExpiresAt(Instant.now().plusSeconds(7200))
                     .sign(algorithm);
 
@@ -39,12 +46,16 @@ public class Token {
 
     public String validateToken(String token) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(secret);
-            return JWT.require(algorithm)
+            DecodedJWT decoded = JWT.require(Algorithm.HMAC256(secret))
                     .withIssuer("auth-api")
                     .build()
-                    .verify(token)
-                    .getSubject();
+                    .verify(token);
+
+            String email = decoded.getSubject();
+            String nome = decoded.getClaim("nome").asString();
+            Long id = decoded.getClaim("id").asLong();
+
+            return email;
 
         } catch (JWTVerificationException exception) {
             throw new RuntimeException("Token inválido ou expirado");
