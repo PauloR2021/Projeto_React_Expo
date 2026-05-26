@@ -10,6 +10,7 @@ import {
 
 import { style } from "../../../src/styles/style_criar";
 import { router } from "expo-router";
+import { api } from "../../../src/services/api";
 
 export default function CriarUsuario() {
 
@@ -36,17 +37,32 @@ export default function CriarUsuario() {
                 setLoading(false);
                 return;
                 
-            }else{
-                setTimeout(() => {
-                Alert.alert('Sucesso', 'Usuário criado com sucesso!');
-                setLoading(false);
-                
-                }, 5000);
-            
             }
 
+            const response = await api.post("/usuario",{
+                nome: nome,
+                email: email,
+                password: password
+
+            });
+
+      
+
+            setLoading(false);
+
+            Alert.alert(
+                "Sucesso",
+                "Usuário criado com sucesso",
+                [
+                    {
+                        text:"OK",
+                        onPress: () => router.push("pages/login")
+                    }
+                ]
+            );
            
         } catch (error) {
+            setLoading(false);
             console.log('Erro ao cadastrar usuário:', error);
             Alert.alert('Erro', 'Ocorreu um erro ao cadastrar o usuário. Por favor, tente novamente.');
 
