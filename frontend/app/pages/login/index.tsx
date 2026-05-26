@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 
+import * as SecureStore from 'expo-secure-store';
 import {Text, View, Image, TextInput, TouchableOpacity, Alert, ActivityIndicator} from "react-native";
 import { style } from "../../../src/styles/styles_login";
 import {MaterialIcons} from '@expo/vector-icons'
@@ -20,6 +21,7 @@ export default function Login() {
     async function getLogin() {
 
         try {
+
             setLoading(true);
 
             if(!email || !password){
@@ -28,10 +30,34 @@ export default function Login() {
                 
             }
 
+            //Log para Debugar
+            console.log("Enviando", {email, password});
+            console.log("URL:",api.defaults.baseURL +"/auth/login");
+
+
             const response = await api.post("/auth/login", {
                 email: email,
                 password: password
             });
+
+            // ✅ Log 2: Ver o retorno completo
+            console.log("Resposta completa:", JSON.stringify(response.data));    
+
+            const token = response.data.data.token; //Token de Validação
+            const payload = token.split(".")[1];
+            const decoded = JSON.parse(atob(payload));
+            console.log(decoded.nome); // "Paulo Ricardo Soares"
+            console.log(decoded.id); 
+            console.log(decoded.email);
+
+            if(!token){
+                // ✅ Log 3: Se não vier token, mostrar onde ele realmente está
+                console.log("Token não encontrado em response.data.token");
+                console.log("Estrutura retornada:", Object.keys(response.data));
+            }
+
+            // ✅ Salva o token no dispositivo
+            await SecureStore.setItemAsync("token", token);
 
             setLoading(false);
 
@@ -47,10 +73,17 @@ export default function Login() {
                 ]
             );
 
+            console.log(token);
+
            
 
-        } catch (error) {
+        } catch (error:any) {
             setLoading(false);
+
+            // ✅ Log 4: Ver o erro completo da API
+            console.log("Status do erro:", error?.response?.status);
+            console.log("Mensagem da API:", JSON.stringify(error?.response?.data));
+            console.log("Erro completo:", error?.message);
 
             Alert.alert("Erro", "E-mail ou senha incorretos...");
             setEmail("");
