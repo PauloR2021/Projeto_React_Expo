@@ -1,4 +1,5 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
+import * as SecureStore from 'expo-secure-store';
 import {
     View,
     Text,
@@ -12,10 +13,11 @@ import { style } from "../../../src/styles/styles_home";
 import {MaterialIcons} from '@expo/vector-icons'
 import { themes } from "../../../src/global/themes";
 import { router } from 'expo-router';
+import { api } from "../../../src/services/api";
 
 
  type Tarefa = {
-    id: number;
+    id?: string | number;
     titulo: string;
     status: string;
  };
@@ -25,21 +27,68 @@ export default function Home() {
     const [titulo, setTitulo] = useState("");
     const [tarefas, setTarefas] = useState<Tarefa[]>([]);
     const [status, setStatus] = useState("Em andamento");
+    const [loading, setLoading] = useState(false);
+    
+    //Busca as tarefas da API 
+    useEffect( () =>{
+        buscarTarefas();
 
-    function adicionarTarefa(){''
-        if(titulo.trim() === ""){
-            Alert.alert("Erro","Digite uma tarefa válida!");
-            return;
+    },[]);
+
+    async function buscarTarefas() {
+        try{
+
+        }catch (error){
+
         }
-       
-        const novaTarefa: Tarefa={
-            id: Date.now(),
-            titulo: titulo,
-            status: status
+
+        
+    }
+
+    async function adicionarTarefa(){
+        try{
+                 
+            if(titulo.trim() === ""){
+                Alert.alert("Erro","Digite uma tarefa válida!");
+                return;
+            }
+            
+            setLoading(true); //Aparece o Logo de Carregamento
+
+            console.log("Enviando",{titulo,status});
+            console.log("URL:",api.defaults.baseURL +"/tarefas");
+
+            // ✅ Ver exatamente o que está sendo mandado no header
+            const token = await SecureStore.getItemAsync("token");
+            console.log("Token:", token);
+        
+            const novaTarefa: Tarefa={
+                titulo: titulo,
+                status: status
+            }
+
+            const response = await api.post("/tarefas", novaTarefa,{
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+
+            });
+            
+            // ✅ Log 2: Ver o retorno completo
+            console.log("Resposta completa:", JSON.stringify(response.data));
+
+            setTarefas([...tarefas, novaTarefa]);
+            setTitulo("");
+            setStatus("Em andamento");
+        }catch (error:any){
+            console.log("Status:", error?.response?.status);
+            console.log("Erro da API:", JSON.stringify(error?.response?.data)); // ← mensagem exata
+            console.log("Erro ao criar tarefa: ", error);
+            Alert.alert("Erro","Erro ao criar tarefa, tente novamente");
+        }finally{
+            setLoading(false);
         }
-        setTarefas([...tarefas, novaTarefa]);
-        setTitulo("");
-        setStatus("Em andamento");
     }
 
     function corStatus(status : String) {
@@ -99,7 +148,7 @@ export default function Home() {
                     >
                         <Text
                              style={{
-                                color: status === "Concluído" ? "#fff" : "#000",
+                                color: status === "Concluido" ? "#fff" : "#000",
                                 fontWeight: "bold",
                                 textAlign: "center",
                             }}                        
@@ -157,24 +206,23 @@ export default function Home() {
 
             <FlatList
                 data={tarefas}
-                keyExtractor={(item) => String(item.id)}
-                showsVerticalScrollIndicator={false}
-                renderItem={({item}) => (
-                    <View style={style.viewList}>
-                        <Text style={style.textList}>{item.titulo}</Text>
-                        <View style={[
-                                style.viewList,
-                                {
-                                    backgroundColor: corStatus(item.status),
-                                }
-                            ]}
-                        >
-                            <Text style={style.textList}>{item.status}</Text>
-                        </View>
-                    </View >
+                keyExtractor={(item, index) => item.id ? String(item.id) : String(index)}
+                renderItem={({ item }) => (
+                    <View style={[ { borderLeftColor: corStatus(item.status), borderLeftWidth: 5 }]}>
+                        <Text>{item.titulo}</Text>
+                        <Text style={[ { color: corStatus(item.status) }]}>
+                            {item.status}
+                        </Text>
+                    </View>
                 )}
-                
-            /> 
+                ListEmptyComponent={
+                    <Text style={{ textAlign: "center", marginTop: 20, color: "#aaa" }}>
+                        Nenhuma tarefa encontrada.
+                    </Text>
+                }
+            />
+
+            
         </View>
     );
 
