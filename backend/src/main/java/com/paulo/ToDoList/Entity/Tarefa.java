@@ -17,7 +17,13 @@ public class Tarefa {
     private Long id;
 
     @Column(nullable = false)
+    private Long idUsuario;
+
+    private String nome;
+
+    @Column(nullable = false)
     private String titulo;
+
     private String status;
     private Timestamp dataCriacao;
 
