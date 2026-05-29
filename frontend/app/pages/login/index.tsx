@@ -96,72 +96,71 @@ export default function Login() {
     return (
         <View style={style.container}>
 
+            {/* Topo */}
             <View style={style.boxTop}>
-                <Image 
-                    style={style.logo}
-                    source={Logo}
-                    resizeMode="contain"
-                />
-                <Text style={style.text}>Bem vindo de volta !</Text>
+                <View style={style.logoContainer}>
+                    <Image
+                        style={style.logo}
+                        source={Logo}
+                        resizeMode="contain"
+                    />
+                </View>
+                <Text style={style.text}>
+                    Bem vindo{"\n"}
+                    <Text style={style.textAccent}>de volta!</Text>
+                </Text>
             </View>
 
+            {/* Formulário */}
             <View style={style.boxMid}>
-                <Text style={style.titleInput}>ENDEREÇO DE EMAIL:</Text>
-
+                <Text style={style.titleInput}>Endereço de email</Text>
                 <View style={style.boxInput}>
-                    <TextInput style={style.input} 
-                        value={email} 
+                    <TextInput
+                        style={style.input}
+                        value={email}
                         onChangeText={setEmail}
+                        placeholder="seu@email.com"
+                        placeholderTextColor="#4B5563"
+                        keyboardType="email-address"
+                        autoCapitalize="none"
                     />
-                    <MaterialIcons name="mail" size={24} color={themes.colors.gray} />
-                
+                    <MaterialIcons name="mail" size={20} color="#4B5563" />
                 </View>
 
-                <Text style={style.titleInput}>SENHA:</Text>
-
+                <Text style={style.titleInput}>Senha</Text>
                 <View style={style.boxInput}>
-                    <TextInput style={style.input} 
-                        value={password} 
+                    <TextInput
+                        style={style.input}
+                        value={password}
                         onChangeText={setPassword}
+                        placeholder="••••••••"
+                        placeholderTextColor="#4B5563"
                         secureTextEntry={true}
                     />
-                    <MaterialIcons name="remove-red-eye" size={24} color={themes.colors.gray} />
+                    <MaterialIcons name="remove-red-eye" size={20} color="#4B5563" />
                 </View>
-               
             </View>
 
-           
+            {/* Botão */}
             <View style={style.boxBottom}>
                 <TouchableOpacity style={style.button} onPress={getLogin}>
-                    {
-                        loading?
-                            <ActivityIndicator color={'#FFFFFF'} size="small" />
-                        :
-                            <Text style={style.buttonText}>ENTRAR</Text>
+                    {loading
+                        ? <ActivityIndicator color="#FFFFFF" size="small" />
+                        : <Text style={style.buttonText}>ENTRAR</Text>
                     }
-                   
                 </TouchableOpacity>
 
+                <Text style={style.textBottom}>
+                    Não tem conta?{" "}
+                    <Text
+                        style={{ color: "#6C63FF", fontWeight: "700" }}
+                        onPress={() => router.push('/pages/criar')}
+                    >
+                        Crie agora!
+                    </Text>
+                </Text>
             </View>
 
-            <Text style={style.textBottom}>
-                Não tem conta?{" "}
-
-                <Text
-                    style={{
-                    color: themes.colors.primary,
-                    fontWeight: 'bold'
-                    }}
-
-                    onPress={() => router.push('/pages/criar')}
-                >
-                    Crie agora!
-                </Text>
-
-            </Text>
-
-            
         </View>
-       
-    )
+    );
 }
