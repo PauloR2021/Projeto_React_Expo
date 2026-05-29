@@ -69,69 +69,81 @@ export default function CriarUsuario() {
         }
     }
 
-    return (
+   return (
         <View style={style.container}>
-            <Text style={style.title}>Criar Usuario</Text>
 
+            {/* Header */}
+            <Text style={style.title}>
+                Criar{" "}
+                <Text style={{ color: "#6C63FF" }}>Conta</Text>
+            </Text>
+            <Text style={style.subtitle}>Preencha os dados para se cadastrar</Text>
+
+            {/* Formulário */}
             <View style={style.form}>
 
-                <Text style={style.text}>NOME:</Text>
+                <Text style={style.text}>Nome</Text>
                 <TextInput
                     style={style.input}
                     value={nome}
                     onChangeText={setNome}
-                    placeholder="Digite o nome"
+                    placeholder="Seu nome completo"
+                    placeholderTextColor="#4B5563"
                 />
 
-                <Text style={style.text}>EMAIL:</Text>
+                <Text style={style.text}>Email</Text>
                 <TextInput
                     style={style.input}
                     value={email}
                     onChangeText={setEmail}
-                    placeholder="Digite o email"
+                    placeholder="seu@email.com"
+                    placeholderTextColor="#4B5563"
                     keyboardType="email-address"
+                    autoCapitalize="none"
                 />
-            
-                <Text style={style.text}>PASSWORD:</Text>
+
+                <Text style={style.text}>Senha</Text>
                 <TextInput
                     style={style.input}
-                    secureTextEntry={true}
                     value={password}
                     onChangeText={setPassword}
-                    placeholder="Digite a senha"
+                    placeholder="••••••••"
+                    placeholderTextColor="#4B5563"
+                    secureTextEntry={true}
                 />
 
-                <Text style={style.text}>CONFIRM PASSWORD:</Text>
+                <Text style={style.text}>Confirmar Senha</Text>
                 <TextInput
                     style={style.input}
-                    secureTextEntry={true}
                     value={confirmPassword}
                     onChangeText={setConfirmPassword}
-                    placeholder="Confirme a senha"
+                    placeholder="••••••••"
+                    placeholderTextColor="#4B5563"
+                    secureTextEntry={true}
                 />
 
             </View>
 
+            {/* Botão */}
             <View style={style.boxBottom}>
                 <TouchableOpacity style={style.button} onPress={cadastrarUsuario}>
-                    {
-                        loading ?
-                            <ActivityIndicator color={'#FFFFFF'} size="small" />
-                        :
-                            <Text style={style.buttonText}>CRIAR USUÁRIO</Text>
+                    {loading
+                        ? <ActivityIndicator color="#FFFFFF" size="small" />
+                        : <Text style={style.buttonText}>CRIAR CONTA</Text>
                     }
-                    
                 </TouchableOpacity>
 
+                <Text style={style.textLogin}>
+                    Já tem conta?{" "}
+                    <Text
+                        style={{ color: "#6C63FF", fontWeight: "700" }}
+                        onPress={() => router.push('/pages/login')}
+                    >
+                        Fazer login
+                    </Text>
+                </Text>
             </View>
 
-            <Text style={style.textLogin}
-                onPress={() => router.push('/pages/login')}
-            >   
-                Realizar Login !
-            </Text>
-            
         </View>
-
-    )
+    );
 }
