@@ -18,12 +18,13 @@ import { api } from "../../../src/services/api";
 
  type Tarefa = {
     id?: string | number;
+    idUsuario?: string | number;
+    nome: string;
     titulo: string;
     status: string;
  };
 
 export default function Home() {
-
     const [titulo, setTitulo] = useState("");
     const [tarefas, setTarefas] = useState<Tarefa[]>([]);
     const [status, setStatus] = useState("Em andamento");
@@ -38,11 +39,37 @@ export default function Home() {
     async function buscarTarefas() {
         try{
 
-        }catch (error){
+            const response = await api.get("/tarefas");
+
+            console.log("Tarefas:",JSON.stringify(response.data));
+
+            setTarefas(response.data.data);
+
+
+        }catch (error:any){
+            console.log("Erro:", JSON.stringify(error?.response?.data));
+            Alert.alert("Erro", "Não foi possível carregar as tarefas.");
 
         }
 
         
+    }
+
+    //Função parapegar os dados que venm dentro do TOKEN de Acesso
+    async function getDecodedToken(){
+        const token = await SecureStore.getItemAsync("token");
+
+        if(!token){
+            console.log("TOken vazio: ",token);
+            return null;
+        }
+
+        //Decodificando os dados do Token
+
+        const payload = token.split(".")[1];
+        const decoded = JSON.parse(atob(payload));
+
+        return decoded;
     }
 
     async function adicionarTarefa(){
@@ -61,8 +88,13 @@ export default function Home() {
             // ✅ Ver exatamente o que está sendo mandado no header
             const token = await SecureStore.getItemAsync("token");
             console.log("Token:", token);
+
+            //Pega os dados do Usuário pelo TOken
+            const usuario = await getDecodedToken();          
         
             const novaTarefa: Tarefa={
+                idUsuario: usuario?.id,
+                nome: usuario.nome,
                 titulo: titulo,
                 status: status
             }
@@ -109,120 +141,111 @@ export default function Home() {
         
     }
 
-    return(
-    
+    return (
         <View style={style.container}>
-            <Text style={style.title}>Minhas Tarefas</Text>
 
-            <Text style={style.login} onPress={() => router.push('pages/login')}>
-                Login
-            </Text>
+            {/* Header */}
+            <View style={style.header}>
+                <Text style={style.title}>
+                    Minhas{" "}
+                    <Text style={style.titleAccent}>Tarefas</Text>
+                </Text>
+                <Text style={style.login} onPress={() => router.push('pages/login')}>
+                    Login
+                </Text>
+            </View>
 
-            {/* Box do meio com input e botões */}
+            {/* Formulário */}
             <View style={style.boxMid}>
                 <Text style={style.text}>Tarefa</Text>
                 <TextInput
                     style={style.input}
-                    placeholder="Digite sua tarefa"
+                    placeholder="Digite sua tarefa..."
+                    placeholderTextColor="#4B5563"
                     value={titulo}
                     onChangeText={setTitulo}
                 />
 
-                {/* Adicionando os botões de status */}
                 <Text style={style.text}>Status</Text>
                 <View style={style.boxStatusButton}>
 
-                   {/*Status Concluído*/}
                     <TouchableOpacity
                         onPress={() => setStatus("Concluido")}
-                        style={[
-                            style.buttonStatus,
-                            {
-                                backgroundColor:
-                                    status === "Concluido"
-                                        ? themes.colors.statusConcluido
-                                        : themes.colors.statusDefault,
-                            }
+                        style={[style.buttonStatus, {
+                            backgroundColor: status === "Concluido" ? themes.colors.statusConcluido + "22" : "transparent",
+                            borderColor: status === "Concluido" ? themes.colors.statusConcluido : "#2A2D3A",
+                        }]}
+                    >
+                        <Text style={{ color: status === "Concluido" ? themes.colors.statusConcluido : "#6B7280", fontWeight: "700", fontSize: 12 }}>
+                            ✓ Concluído
+                        </Text>
+                    </TouchableOpacity>
 
-                        ]}
-                    >
-                        <Text
-                             style={{
-                                color: status === "Concluido" ? "#fff" : "#000",
-                                fontWeight: "bold",
-                                textAlign: "center",
-                            }}                        
-                        >Concluído</Text>
-                    </TouchableOpacity>
-                            
-                    {/*Status Em Andamento*/}
-                    <TouchableOpacity 
+                    <TouchableOpacity
                         onPress={() => setStatus("Em andamento")}
-                        style={[                        
-                            style.buttonStatus,
-                                {
-                                    backgroundColor:
-                                        status === "Em andamento" 
-                                        ? themes.colors.statusEmAndamento 
-                                        : themes.colors.statusDefault,
-                                }
-                            ]}
+                        style={[style.buttonStatus, {
+                            backgroundColor: status === "Em andamento" ? themes.colors.statusEmAndamento + "22" : "transparent",
+                            borderColor: status === "Em andamento" ? themes.colors.statusEmAndamento : "#2A2D3A",
+                        }]}
                     >
-                        <Text style={{
-                                color: status === "Em andamento" ? "#fff" : "#000",
-                                fontWeight: "bold",
-                                textAlign: "center",
-                            }}
-                        >Em Andamento</Text>
+                        <Text style={{ color: status === "Em andamento" ? themes.colors.statusEmAndamento : "#6B7280", fontWeight: "700", fontSize: 12 }}>
+                            ⟳ Andamento
+                        </Text>
                     </TouchableOpacity>
-                            
-                     {/*Status Pendente*/}
-                    <TouchableOpacity 
+
+                    <TouchableOpacity
                         onPress={() => setStatus("Pendente")}
-                        style={[
-                            style.buttonStatus,
-                            {
-                                backgroundColor:
-                                    status === "Pendente"
-                                        ? themes.colors.statusPendente 
-                                        : themes.colors.statusDefault,
-                            }
-                        ]}
+                        style={[style.buttonStatus, {
+                            backgroundColor: status === "Pendente" ? themes.colors.statusPendente + "22" : "transparent",
+                            borderColor: status === "Pendente" ? themes.colors.statusPendente : "#2A2D3A",
+                        }]}
                     >
-                        <Text style={{ color: status === "Pendente" ? "#fff" : "#000",
-                                        fontWeight: "bold",
-                                        textAlign: "center",
-                                      
-                            }}
-                        >Pendente</Text>
+                        <Text style={{ color: status === "Pendente" ? themes.colors.statusPendente : "#6B7280", fontWeight: "700", fontSize: 12 }}>
+                            ⏳ Pendente
+                        </Text>
                     </TouchableOpacity>
+
                 </View>
             </View>
 
-            <TouchableOpacity style={style.buttonAdicionar} onPress={adicionarTarefa}>
-                <Text style={style.textButtonAdicionar}>Adicionar Tarefa</Text>
-                <MaterialIcons name="add" size={24} color="#fff" style={{ marginLeft: 8 }} />
+            {/* Botão */}
+            <TouchableOpacity
+                style={[style.buttonAdicionar, loading && { opacity: 0.6 }]}
+                onPress={adicionarTarefa}
+                disabled={loading}
+            >
+                <Text style={style.textButtonAdicionar}>
+                    {loading ? "Adicionando..." : "Adicionar Tarefa"}
+                </Text>
+                <MaterialIcons name="add" size={20} color="#fff" style={{ marginLeft: 8 }} />
             </TouchableOpacity>
+
+            {/* Lista */}
+            <Text style={style.sectionTitle}>
+                {tarefas.length} tarefa{tarefas.length !== 1 ? "s" : ""}
+            </Text>
 
             <FlatList
                 data={tarefas}
-                keyExtractor={(item, index) => item.id ? String(item.id) : String(index)}
+                keyExtractor={(item, index) => `tarefa-${item.id ?? index}`}
+                showsVerticalScrollIndicator={false}
                 renderItem={({ item }) => (
-                    <View style={[ { borderLeftColor: corStatus(item.status), borderLeftWidth: 5 }]}>
-                        <Text>{item.titulo}</Text>
-                        <Text style={[ { color: corStatus(item.status) }]}>
-                            {item.status}
-                        </Text>
+                    <View style={style.viewList}>
+                        <View style={[style.statusDot, { backgroundColor: corStatus(item.status) }]} />
+                        <View style={{ flex: 1 }}>
+                            <Text style={style.textList}>{item.titulo}</Text>
+                            <View style={[style.statusBadge, { backgroundColor: corStatus(item.status) + "22" }]}>
+                                <Text style={[style.statusBadgeText, { color: corStatus(item.status) }]}>
+                                    {item.status}
+                                </Text>
+                            </View>
+                        </View>
                     </View>
                 )}
                 ListEmptyComponent={
-                    <Text style={{ textAlign: "center", marginTop: 20, color: "#aaa" }}>
-                        Nenhuma tarefa encontrada.
-                    </Text>
+                    <Text style={style.emptyText}>Nenhuma tarefa encontrada.</Text>
                 }
             />
-
-            
         </View>
     );
 
