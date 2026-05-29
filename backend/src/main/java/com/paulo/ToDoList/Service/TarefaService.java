@@ -3,6 +3,7 @@ package com.paulo.ToDoList.Service;
 import com.paulo.ToDoList.Dtos.Tarefa.RequestTarefa;
 import com.paulo.ToDoList.Dtos.Tarefa.ResponseTarefa;
 import com.paulo.ToDoList.Entity.Tarefa;
+
 import com.paulo.ToDoList.Entity.Usuario;
 import com.paulo.ToDoList.Repository.TarefaRepository;
 import jakarta.transaction.Transactional;
@@ -22,7 +23,10 @@ public class TarefaService {
 
     @Transactional
     public ResponseTarefa create (RequestTarefa request) {
+        Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Tarefa tarefa = new Tarefa();
+        tarefa.setIdUsuario(usuario.getId());
+        tarefa.setNome(usuario.getNome());
         tarefa.setTitulo(request.titulo());
         tarefa.setStatus(request.status());
 
@@ -31,12 +35,8 @@ public class TarefaService {
         return toResponse(newTarefa);
     }
 
-    public List<ResponseTarefa> findyTarefas(Long idUsuario) {
-        if(tarefaRepository.existsById(idUsuario)) {
-            throw new RuntimeException("Não existe tarefa cadastradas com esse usuário!");
-        }
-
-        return tarefaRepository.findAll()
+    public List<ResponseTarefa> findByTarefas(Long idUsuario) {
+        return tarefaRepository.findByIdUsuario(idUsuario)
                 .stream()
                 .map(this::toResponse)
                 .toList();
