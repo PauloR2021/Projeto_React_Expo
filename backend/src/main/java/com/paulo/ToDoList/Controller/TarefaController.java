@@ -35,10 +35,11 @@ public class TarefaController {
     }
 
     @GetMapping
-    public ResponseEntity<RetornoApi<List<ResponseTarefa>>> findAll(){
+    public ResponseEntity<RetornoApi<List<ResponseTarefa>>> findAllTarefas(){
 
         Usuario usuario = (Usuario) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<ResponseTarefa> response = tarefaService.findyTarefas(usuario.getId());
+
+        List<ResponseTarefa> response = tarefaService.findByTarefas(usuario.getId());
 
         RetornoApi<List<ResponseTarefa>> apiResponse =
                 new RetornoApi<>(true,"Tarefas",response);
