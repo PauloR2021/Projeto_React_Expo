@@ -1,113 +1,124 @@
 import { Dimensions, StyleSheet } from "react-native";
-import { themes } from "../global/themes";
+
+const { height } = Dimensions.get("window");
 
 export const style = StyleSheet.create({
 
-    container:{
+    container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 20
-
+        backgroundColor: "#0F1117",
+        alignItems: "center",
+        justifyContent: "center",
+        paddingHorizontal: 28,
     },
 
-    boxTop:{
-        width: '100%',
-        height: Dimensions.get('window').height / 3,
-        alignItems: 'center',
-        justifyContent: 'center',
-       
-
+    // ── Topo ─────────────────────────────────
+    boxTop: {
+        width: "100%",
+        alignItems: "center",
+        marginBottom: 40,
     },
 
-    boxMid:{
-        width: '100%',
-        height: Dimensions.get('window').height / 4,
-        paddingHorizontal: 36,
-     
-
-    },
-
-    boxBottom:{
-        height: Dimensions.get('window').height / 3,
-        width: '100%',
-        alignItems: 'center',
-        justifyContent: 'center', 
-    
-    },
-
-    logo:{
+    logoContainer: {
         width: 80,
         height: 80,
-
-    },
-
-    text:{
-        fontWeight: 'bold',
-        marginTop: 40,
-        fontSize: 18,
-    },
-
-    titleInput:{
-        marginLeft:5,
-        color:themes.colors.gray,
-        marginTop: 20,
-    },
-
-    boxInput:{
-        width: '100%',
-        height: 40,
+        borderRadius: 24,
+        backgroundColor: "#1A1D27",
+        alignItems: "center",
+        justifyContent: "center",
+        marginBottom: 20,
         borderWidth: 1,
-        borderRadius: 40,
-        marginTop:10,
-        flexDirection:'row',
-        alignItems:'center',
-        paddingHorizontal:5,
-        backgroundColor: themes.colors.lightGray,
-        borderColor: themes.colors.lightGray
-
+        borderColor: "#2A2D3A",
+        shadowColor: "#6C63FF",
+        shadowOffset: { width: 0, height: 8 },
+        shadowOpacity: 0.3,
+        shadowRadius: 16,
+        elevation: 10,
     },
 
-    input:{
-        height: '100%',
-        width: '90%',
-        borderRadius: 40,
-    
+    logo: {
+        width: 44,
+        height: 44,
     },
 
-    button:{
-
-        width: 250,
-        height: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: themes.colors.primary,
-        borderRadius: 40,
-
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 12,
-        },
-        shadowOpacity: 0.58,
-        shadowRadius: 16.00,
-
-        elevation: 24,
-
+    text: {
+        fontSize: 26,
+        fontWeight: "800",
+        color: "#FFFFFF",
+        letterSpacing: -0.5,
+        textAlign: "center",
     },
 
-    buttonText:{
-        color: themes.colors.white,
-        fontWeight: 'bold',
-        fontSize: 16,
+    textAccent: {
+        color: "#6C63FF",
     },
 
-    textBottom:{
-        fontSize: 16,
-        marginTop: 1,
-        color: themes.colors.gray,  
+    // ── Formulário ────────────────────────────
+    boxMid: {
+        width: "100%",
+        marginBottom: 24,
     },
-  
 
+    titleInput: {
+        fontSize: 11,
+        fontWeight: "700",
+        color: "#9CA3AF",
+        letterSpacing: 1.2,
+        textTransform: "uppercase",
+        marginBottom: 8,
+        marginLeft: 4,
+    },
+
+    boxInput: {
+        width: "100%",
+        height: 52,
+        backgroundColor: "#1A1D27",
+        borderWidth: 1.5,
+        borderColor: "#2A2D3A",
+        borderRadius: 14,
+        flexDirection: "row",
+        alignItems: "center",
+        paddingHorizontal: 16,
+        marginBottom: 16,
+    },
+
+    input: {
+        flex: 1,
+        height: "100%",
+        color: "#FFFFFF",
+        fontSize: 15,
+    },
+
+    // ── Botão ─────────────────────────────────
+    boxBottom: {
+        width: "100%",
+        alignItems: "center",
+        gap: 20,
+    },
+
+    button: {
+        width: "100%",
+        height: 54,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#6C63FF",
+        borderRadius: 14,
+        shadowColor: "#6C63FF",
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.4,
+        shadowRadius: 12,
+        elevation: 8,
+    },
+
+    buttonText: {
+        color: "#FFFFFF",
+        fontWeight: "800",
+        fontSize: 15,
+        letterSpacing: 1,
+    },
+
+    textBottom: {
+        fontSize: 14,
+        color: "#6B7280",
+    },
 });
-

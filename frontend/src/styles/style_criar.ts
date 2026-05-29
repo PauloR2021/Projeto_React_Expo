@@ -1,124 +1,90 @@
-import { Dimensions,StyleSheet } from "react-native";
-import { themes } from "../global/themes";
+import { StyleSheet } from "react-native";
 
 export const style = StyleSheet.create({
 
-    container:{
-        flex:1,
-        alignContent:'center',
-        justifyContent:'center',
-        padding: 10,
-        alignItems:'center',
-        marginTop: 30,
-        color: themes.colors.bgScreen,
+    container: {
+        flex: 1,
+        backgroundColor: "#0F1117",
+        paddingHorizontal: 28,
+        paddingTop: 60,
+        paddingBottom: 40,
     },
 
-    title:{
-        fontSize: 24,
-        fontWeight: 'bold',
-        color: themes.colors.gray,
-        marginTop:10,
-        marginBottom:50,
-        textAlign:'center',
-
+    // ── Header ───────────────────────────────
+    title: {
+        fontSize: 28,
+        fontWeight: "800",
+        color: "#FFFFFF",
+        letterSpacing: -0.5,
+        marginBottom: 8,
     },
 
-    form:{
-
-        width: '100%',
-        backgroundColor:"#fff",
-        padding: 20,
-        borderRadius: 12,
-
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 12,
-        },
-        shadowOpacity: 0.58,
-        shadowRadius: 16.00,
-
-        elevation: 10,
-        
-    },
-
-    text:{
-        fontWeight: 'bold',
-        marginTop: 20,
+    subtitle: {
         fontSize: 14,
-        marginBottom: 10,
-       
-
+        color: "#6B7280",
+        marginBottom: 32,
     },
 
-    boxInput:{
-        width: '100%',
-        height: 40,
-        borderWidth: 1,
-        borderRadius: 40,
-        marginTop:10,
-        flexDirection:'row',
-        alignItems:'center',
-        paddingHorizontal:5,
-        backgroundColor: themes.colors.lightGray,
-        borderColor: themes.colors.lightGray
+    // ── Formulário ────────────────────────────
+    form: {
+        width: "100%",
+        marginBottom: 24,
     },
 
-    input:{
-        backgroundColor: themes.colors.white,
-        width:350,
-        borderWidth: 1,
-        borderColor:'#ccc',
-        borderRadius: 8,
-        padding: 14,
-        marginBottom: 14,
-        fontSize: 16,
-
+    text: {
+        fontSize: 11,
+        fontWeight: "700",
+        color: "#9CA3AF",
+        letterSpacing: 1.2,
+        textTransform: "uppercase",
+        marginBottom: 8,
+        marginLeft: 4,
     },
 
-    boxBottom:{
-        width: '100%',
-        marginTop: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
+    input: {
+        width: "100%",
+        height: 52,
+        backgroundColor: "#1A1D27",
+        borderWidth: 1.5,
+        borderColor: "#2A2D3A",
+        borderRadius: 14,
+        paddingHorizontal: 16,
+        marginBottom: 16,
+        fontSize: 15,
+        color: "#FFFFFF",
     },
 
-    button:{
-        width: 250,
-        height: 60,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: themes.colors.primary,
-        borderRadius: 40,
-
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 12,
-        },
-        shadowOpacity: 0.58,
-        shadowRadius: 16.00,
-
-        elevation: 10,
+    // ── Botão ─────────────────────────────────
+    boxBottom: {
+        width: "100%",
+        alignItems: "center",
+        gap: 20,
     },
 
-    buttonText:{
-        color: themes.colors.white,
-        fontWeight: 'bold',
-        fontSize: 20,
-
+    button: {
+        width: "100%",
+        height: 54,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#6C63FF",
+        borderRadius: 14,
+        shadowColor: "#6C63FF",
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.4,
+        shadowRadius: 12,
+        elevation: 8,
     },
 
-    textLogin:{
-        color: themes.colors.primary,
-        fontWeight: 'bold',
-        fontSize: 18,
-        alignContent:'center',
-        justifyContent:'center',
-        marginTop: 40,
+    buttonText: {
+        color: "#FFFFFF",
+        fontWeight: "800",
+        fontSize: 15,
+        letterSpacing: 1,
+    },
 
-    }
-
-
-
-})
+    textLogin: {
+        fontSize: 14,
+        color: "#6B7280",
+        textAlign: "center",
+    },
+});
