@@ -30,8 +30,13 @@ public class SecurityFilter extends OncePerRequestFilter {
     {
         String token = recoverToken(request);
 
+        System.out.println("=== SecurityFilter ===");
+        System.out.println("URL: " + request.getRequestURI());
+        System.out.println("Token recebido: " + token);
+
         if(token != null) {
             String email = tokenService.validateToken(token);
+            System.out.println("Email validado: " + email);
 
             if(email != null) {
                 usuarioRepository.findByEmail(email).ifPresent(user -> {
@@ -50,6 +55,10 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     private String recoverToken(HttpServletRequest request){
         String authHeader = request.getHeader("Authorization");
+
+        // ✅ Log para ver o que está chegando
+        System.out.println("Authorization header: " + authHeader);
+
         if(authHeader == null || !authHeader.startsWith("Bearer ")) return null;
         return authHeader.substring(7).trim(); // remove "Bearer " e espaços extras
     }

@@ -51,14 +51,10 @@ public class Token {
                     .build()
                     .verify(token);
 
-            String email = decoded.getSubject();
-            String nome = decoded.getClaim("nome").asString();
-            Long id = decoded.getClaim("id").asLong();
-
-            return email;
+            return decoded.getSubject();
 
         } catch (JWTVerificationException exception) {
-            throw new RuntimeException("Token inválido ou expirado");
+            return null;
         }
     }
 }
